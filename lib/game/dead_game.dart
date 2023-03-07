@@ -1,50 +1,30 @@
-import 'dart:math';
-
-import 'package:flame/events.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class DeadGame extends Forge2DGame with KeyboardEvents {
-  DeadGame();
-  double offsetX = 0;
-  double offsetY = 0;
-  double radius = 0;
-  double time = 0;
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final Paint paint = Paint();
-    paint.color = Colors.brown;
-    canvas.drawCircle(Offset(offsetX, offsetY), pi * radius, paint);
-  }
+class DeadGame extends StatelessWidget {
+  const DeadGame({super.key});
 
   @override
-  KeyEventResult onKeyEvent(
-      RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is RawKeyDownEvent) {
-      keysPressed.forEach((element) {
-        if (element.keyLabel == 'A') {
-          offsetX -= 10;
-        }
-        if (element.keyLabel == 'W') {
-          offsetY -= 10;
-        }
-        if (element.keyLabel == 'D') {
-          offsetX += 10;
-        }
-        if (element.keyLabel == 'S') {
-          offsetY += 10;
-        }
-      });
-    }
-    return super.onKeyEvent(event, keysPressed);
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    time += dt;
-    radius = time % 10;
+  Widget build(BuildContext context) {
+    return BonfireWidget(
+      map: WorldMapByTiled(
+        'tiled/map.json',
+        objectsBuilder: {},
+      ),
+      joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
+        directional: JoystickDirectional(),
+        actions: [
+          JoystickAction(
+            actionId: 1,
+            margin: const EdgeInsets.all(50),
+          ),
+        ],
+      ),
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true,
+      ),
+      lightingColorGame: Colors.black.withOpacity(0.7),
+    );
   }
 }

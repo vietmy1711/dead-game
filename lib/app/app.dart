@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GameWidget<DeadGame>(game: DeadGame()),
+      home: DeadGame(),
     );
   }
 }
